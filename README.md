@@ -2,7 +2,7 @@
 
 **🏆 3rd Place Winner - AGI House Productivity Hackathon**
 
-An intelligent document analysis tool that performs semantic comparison between original documents and their summaries, providing a quick way for users to get insights into faithfullness and accuracy of summaries.
+An intelligent document analysis tool I created in about 6 hours that performs semantic comparison between original documents and their summaries. It provides a quick way for users to get insights into faithfullness and accuracy of summaries.
 
 ## Overview
 
