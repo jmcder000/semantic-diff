@@ -1,24 +1,5 @@
 import React from 'react';
 
-// function scoreToColor(score) {
-//   if (score == null || Number.isNaN(score)) {
-//     return 'hsla(210, 8%, 70%, 0.35)'; // neutral
-//   }
-//   const s = Math.min(1, Math.max(0, score));
-//   const boosted = Math.pow(s, 0.5);
-//   const hue = boosted * 120;             // 0 red → 120 green
-//   const saturation = 100;
-//   const lightness = 60 - boosted * 15;
-//   const alpha = 0.85;
-//   return `hsla(${hue}, ${saturation}%, ${lightness}%, ${alpha})`;
-// }
-// function scoreToStroke(score) {
-//   if (score == null || Number.isNaN(score)) return 'hsla(210, 8%, 45%, 0.5)';
-//   const s = Math.min(1, Math.max(0, score));
-//   const boosted = Math.pow(s, 0.65);
-//   const hue = boosted * 120;
-//   return `hsla(${hue}, 90%, 30%, 0.7)`;
-// }
 
 // Normalize to a 0..100 percentage, accepting 0..1, 0..100, or strings.
 // Normalize to a 0..100 percent (accepts 0..1, 0..100, or strings)
