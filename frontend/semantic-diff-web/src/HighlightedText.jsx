@@ -21,50 +21,65 @@ import React from 'react';
 // }
 
 // Normalize to a 0..100 percentage, accepting 0..1, 0..100, or strings.
+// Normalize to a 0..100 percent (accepts 0..1, 0..100, or strings)
 function toPercent(score) {
   if (score == null) return null;
   const n = typeof score === 'number' ? score : Number(score);
   if (!Number.isFinite(n)) return null;
-  if (n <= 1) return Math.max(0, Math.min(1, n)) * 100; // assume 0..1
-  return Math.max(0, Math.min(100, n));                  // assume 0..100
+  return n <= 1 ? Math.max(0, Math.min(1, n)) * 100 : Math.max(0, Math.min(100, n));
 }
 
-// Background color: <50 = very dark red; 50..100 = red→green ramp
+// Legend endpoints (match your UI legend)
+const LEGEND_RED   = { h: 0,   s: 95, l: 45, a: 0.85 };
+const LEGEND_GREEN = { h: 120, s: 95, l: 35, a: 0.85 };
+
+// <50: gentler red (less extreme than before)
+const SOFT_RED_BG   = 'hsla(0, 85%, 60%, 0.65)';  // softer fill
+const SOFT_RED_STROKE = 'hsla(0, 80%, 45%, 0.80)'; // darker outline for contrast
+
+// 50..100 interpolation helper (hue & lightness ramp; saturation/alpha fixed)
+function rampColor(t /* 0..1 */) {
+  // slight gamma to keep mid-range readable but not too punchy
+  const g = Math.pow(t, 0.8);
+  const h = LEGEND_RED.h + (LEGEND_GREEN.h - LEGEND_RED.h) * g;   // 0 → 120
+  const l = LEGEND_RED.l + (LEGEND_GREEN.l - LEGEND_RED.l) * g;   // 45% → 35%
+  return `hsla(${h}, ${LEGEND_RED.s}%, ${l}%, ${LEGEND_RED.a})`;
+}
+
+function rampStroke(t /* 0..1 */) {
+  const g = Math.pow(t, 0.8);
+  const h = LEGEND_RED.h + (LEGEND_GREEN.h - LEGEND_RED.h) * g;
+  // darker outline than fill for contrast
+  const lStroke = 30 + (22 - 30) * g; // 30% → 22%
+  return `hsla(${h}, 90%, ${lStroke}%, 0.85)`;
+}
+
+// Background color mapping
 function scoreToColor(score) {
   const pct = toPercent(score);
-  if (pct == null) return 'hsla(210, 8%, 70%, 0.35)'; // neutral
+  if (pct == null) return 'hsla(210, 8%, 70%, 0.35)'; // neutral/missing
 
   if (pct < 50) {
-    // "very very dark red"
-    return 'hsla(0, 95%, 22%, 0.90)';
+    // less extreme low-end
+    return SOFT_RED_BG;
   }
 
-  // Map 50..100 to 0..1 and ramp hue 0→120 (red→green)
-  const tRaw = (pct - 50) / 50;          // 0..1
-  const t = Math.pow(tRaw, 0.6);         // gamma for extra punch
-  const hue = t * 120;                   // 0 (red) → 120 (green)
-  const saturation = 95;
-  const lightness = 48;                  // fixed for stronger, consistent look
-  const alpha = 0.9;
-
-  return `hsla(${hue}, ${saturation}%, ${lightness}%, ${alpha})`;
+  const t = (pct - 50) / 50; // 0..1
+  return rampColor(t);
 }
 
-// Outline stroke to match hue, darker for contrast
+// Outline stroke mapping
 function scoreToStroke(score) {
   const pct = toPercent(score);
   if (pct == null) return 'hsla(210, 8%, 45%, 0.6)';
 
   if (pct < 50) {
-    return 'hsla(0, 90%, 18%, 0.9)';     // very dark red stroke
+    return SOFT_RED_STROKE;
   }
 
-  const tRaw = (pct - 50) / 50;
-  const t = Math.pow(tRaw, 0.6);
-  const hue = t * 120;
-  return `hsla(${hue}, 90%, 28%, 0.85)`;
+  const t = (pct - 50) / 50; // 0..1
+  return rampStroke(t);
 }
-
 /**
  * spans: [{ charStart, charEnd, tooltip?, score?, bucket?, meta? }, ...]
  */

@@ -194,11 +194,31 @@ export default function App() {
                   {/* Legend */}
                   <div className="flex items-center gap-3">
                     <span className="text-xs text-muted-foreground">Similarity:</span>
-                    <span className="w-32 h-2 rounded-full" style={{
-                      background: 'linear-gradient(90deg, hsla(0,95%,45%,0.85), hsla(120,95%,35%,0.85))'
-                    }} />
-                    <span className="text-[10px] text-muted-foreground">low</span>
-                    <span className="text-[10px] text-muted-foreground ml-auto">high</span>
+
+                    {/* <50 swatch (soft red) */}
+                    <span
+                      className="inline-flex items-center gap-1 text-[10px] text-muted-foreground"
+                      title="< 50"
+                    >
+                      <span
+                        className="inline-block w-4 h-2 rounded"
+                        style={{ background: 'hsla(0, 85%, 60%, 0.65)' }} // SOFT_RED_BG
+                      />
+                      <span className="hidden sm:inline">&lt;50</span>
+                    </span>
+
+                    {/* 50→100 ramp */}
+                    <span
+                      className="w-32 h-2 rounded-full border border-border/60"
+                      title="50 → 100"
+                      style={{
+                        background:
+                          'linear-gradient(90deg, hsla(0,95%,45%,0.85) 0%, hsla(120,95%,35%,0.85) 100%)'
+                      }}
+                    />
+
+                    <span className="text-[10px] text-muted-foreground">50</span>
+                    <span className="text-[10px] text-muted-foreground ml-auto">100</span>
                   </div>
 
                   <div className="prose prose-sm max-w-none">
